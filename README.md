@@ -19,7 +19,7 @@ lightboxのスクリプト Lightcase.js は表示サンプルとして使って�
 他のスクリプトを使う場合は、iframe読み込み・ウィンドウ解像度の指定ができるものを使ってください
 
 ## Usage
-AMP版を使う場合は、仕様に沿って <link rel="canonical" href="http://sample.html"> このcanonicalのURLを必ず修正してください。
+AMP版を使う場合は、仕様に沿って `<link rel="canonical" href="http://sample.html">` このcanonicalのURLを必ず修正してください。
 
 ## Install
 AMP-VN-SamplePage/popup-page/ev01.html を適当に使ってください。
