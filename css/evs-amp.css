@@ -1,0 +1,164 @@
+@charset "UTF-8";
+/* ビジュアルノベルのwebページサンプルで使えそうなCSS */
+/* モバイル解像度時のテキストエリア縦幅を画像のアスペクト比にあわせて指定
+* 4:3   calc(100vh - 75vw)
+* 16:9   calc(100vh - 56.2vw)
+----------------------------- */
+/* テキストウィンドがモバイル表示に切り替わる横幅
+* 画像の横幅から1px引いた値を入れる
+----------------------------- */
+/* メッセージウィンドの色設定
+----------------------------- */
+/* 画像の部分
+----------------------------- */
+.amp-img-wrap {
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.amp-img-wrap:hover {
+  opacity: 0;
+}
+
+/* 発射エフェクト
+----------------------------- */
+.flash:hover {
+  animation: flash 1s linear;
+}
+
+@keyframes flash {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* メッセージウィンドの部分
+----------------------------- */
+.space-massage {
+  background: rgba(0, 0, 0, 0.6);
+  bottom: 0;
+  color: #fff;
+  font-family: "Yu Gothic", "Meiryo", sans-serif;
+  height: 30%;
+  overflow: auto;
+  position: fixed;
+  text-shadow: 1px 0 2px #000, -1px 0 2px #000, 0 1px 2px #000, 0 -1px 2px #000;
+  width: 100%;
+}
+
+@media (max-width: 1023px) {
+  .space-massage {
+    height: calc(100vh - 75vw);
+  }
+}
+
+/* メッセージウィンド折りたたみ部分 label
+----------------------------- */
+.closebtn {
+  bottom: 0;
+  color: #fff;
+  cursor: pointer;
+  display: inline;
+  line-height: 0;
+  margin-left: .3em;
+  padding-bottom: 1.5em;
+  position: fixed;
+  text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 5px 5px 0 #fff;
+  z-index: 10;
+}
+
+.closebtn:hover {
+  text-shadow: 1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 3px 3px 0 #fff;
+}
+
+.closebtn::selection {
+  background: transparent;
+  color: transparent;
+}
+
+@media (max-width: 1023px) {
+  .closebtn {
+    /* モバイル解像度では畳む必要ないので消す */
+    display: none;
+  }
+}
+
+/* メッセージウィンド折りたたみ部分 input
+----------------------------- */
+.closebtn-input {
+  display: none;
+}
+
+.closebtn-input + .space-massage {
+  display: none;
+}
+
+.closebtn-input:checked + .space-massage {
+  display: block;
+}
+
+/* テキスト設定
+----------------------------- */
+.name {
+  font-weight: bold;
+  margin: .5em 0 .2em 2em;
+}
+
+@media (max-width: 1023px) {
+  .name {
+    margin: .5em 0 .2em;
+  }
+}
+
+/* 名前カラー
+----------------------------- */
+.red {
+  color: #f36;
+}
+
+.blue {
+  color: #6ff;
+}
+
+.purple {
+  color: #c9f;
+}
+
+.gray {
+  color: #b0b0b0;
+}
+
+.pink {
+  color: #ef1c51;
+}
+
+/* 名前のついてるセリフ
+----------------------------- */
+.text {
+  font-size: .9rem;
+  margin: 0 1em 0 2.3em;
+}
+
+@media (max-width: 1023px) {
+  .text {
+    margin: 0 0 0 .3em;
+  }
+}
+
+/* 名前のついてないセリフ以外の文字
+----------------------------- */
+.novoice {
+  color: #ddd;
+  font-size: .8em;
+  margin: .5em 1em 0 3em;
+}
+
+@media (max-width: 1023px) {
+  .novoice {
+    margin: .5em 0 0 1em;
+  }
+}

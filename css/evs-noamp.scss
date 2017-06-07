@@ -1,0 +1,222 @@
+@charset 'utf-8';
+
+
+/* ビジュアルノベルのwebページサンプルで使えそうなCSS */
+
+
+
+/* モバイル解像度時のテキストエリア縦幅を画像のアスペクト比にあわせて指定
+* 4:3   calc(100vh - 75vw)
+* 16:9   calc(100vh - 56.2vw)
+----------------------------- */
+$image-aspect-height: calc(100vh - 75vw);
+
+
+/* テキストウィンドの位置が切り替わる横幅
+* 画像の横幅から1px引いた値を入れる
+----------------------------- */
+$responsive-width: 1023px;
+
+
+/* 画像の縦横幅 これは別に設定しなくてもいい
+----------------------------- */
+$height-article: 100vh;  // 画像のたて解像度
+$width-article: 100vw;  // 画像のよこ解像度
+
+
+/*
+z-indexメモ
+
+1～100 上の画像スペース
+100～200 下のテキストウィンドスペース
+----------------------------- */
+
+
+
+body {
+  margin: 0;
+}
+
+article {  // コンテンツのラッパー
+  height: $height-article;
+  position: relative;  // メッセージウィンドをabsoluteで配置する用
+  width: $width-article;
+}
+
+
+
+
+
+/* 画像の部分
+----------------------------- */
+.space-cg {
+  height: 100%;  // テキストエリアの下まで表示領域ある。 今はレスポンシブ画像サイズのおかげではみ出してないように見える
+  position: relative;
+  z-index: 10;
+
+  img {
+// 画像のレスポンシブ化
+    display: block;
+    height: auto;
+    max-width: 100%;
+
+// 上端部で2枚の画像を重ねて表示する
+    position: absolute;
+    top: 0;
+
+    &:hover {  // マウス乗せたら一枚目の画像を非表示 .flashのopacityアニメーションとは別
+      opacity: 0;
+    }
+
+    &:nth-child(1) {  z-index: 2;  }  // 一枚目の画像
+    &:nth-child(2) {  z-index: 1;  }  // 二枚目の画像
+  }
+}
+
+/* 発射エフェクト
+----------------------------- */
+.flash:hover {  animation: flash 1s linear 1;  }
+@keyframes flash {  // 画像が一瞬だけ全部透明になるのでbackgroundの#fffが見えて光ってるようにみえる
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+
+
+/* メッセージウィンドの部分
+----------------------------- */
+.space-massage {
+  $background-color: rgba(0, 0, 0, .6);
+  $text-color: #fff;
+  $text-shadow-color: #000;
+
+  background: $background-color;
+  bottom: 0;
+  color: $text-color;
+  font-family: 'Yu Gothic', 'Meiryo', sans-serif;	// フォント指定  游ゴシック、メイリオ優先
+  height: 30%;  // デスクトップ解像度でのテキストウィンドの縦幅
+  overflow: auto;
+  position: fixed;
+  text-shadow: 1px 0 2px $text-shadow-color,
+  			-1px 0 2px $text-shadow-color,
+  			0 1px 2px $text-shadow-color,
+  			0 -1px 2px $text-shadow-color;
+  width: 100%;
+  z-index: 100;  // 画像の上に表示するためのz-index
+}
+
+@media (max-width: $responsive-width) {
+  .space-massage {  // モバイル解像度用のエキストエリア位置指定
+    height: $image-aspect-height;
+  }
+}
+
+
+
+/* メッセージウィンド折りたたみ部分 label
+----------------------------- */
+.closebtn {
+  $btn-outline-color: #000;
+  $btn-dropshadow-color: #fff;
+  $btn-color: #fff;
+
+  bottom: 0;
+  color: $btn-color;
+  cursor: pointer;  // クリックできるように見せるためにカーソル変更
+  display: inline;
+  line-height: 0;
+  margin-left: .3em;
+  padding-bottom: 1.5em;  // 上の方にチェックボックスのマージンが絶対つくせいで表示位置がズレるので調整
+  position: fixed;
+  text-shadow: 1px 0 0 $btn-outline-color, -1px 0 0 $btn-outline-color, 0 1px 0 $btn-outline-color, 0 -1px 0 $btn-outline-color, 5px 5px 0 $btn-dropshadow-color;
+  z-index: 200;
+
+  &:hover {
+    text-shadow: 1px 0 0 $btn-outline-color, -1px 0 0 $btn-outline-color, 0 1px 0 $btn-outline-color, 0 -1px 0 $btn-outline-color, 3px 3px 0 $btn-dropshadow-color;
+  }
+
+  &::selection {  // クリックするとテキスト範囲選択されることがあるんで選択カラー透明にする 現状firefoxでは-mozつけないと効かない
+    background: transparent;
+    color: transparent;
+  }
+}
+
+@media (max-width: $responsive-width) {
+  .closebtn {  /* モバイル解像度では畳む必要ないので消す */
+    display: none;
+  }
+}
+
+
+/* メッセージウィンド折りたたみ部分 input
+----------------------------- */
+.closebtn-input {
+  display: none;  // チェックボックスは表示する必要ないので消す
+
+  + .space-massage {
+    display: none;  // チェックボックスのチェックついてないときは非表示
+  }
+
+  &:checked + .space-massage {
+    display: block;  // チェックボックスのチェックついてるときは表示
+  }
+}
+
+
+
+
+/* テキスト設定
+----------------------------- */
+.name {  // 名前
+  font-weight: bold;
+  margin: .5em 0 .2em 2em;	// たたむボタンが被らないように余白確保
+}
+@media (max-width: $responsive-width) {  // モバイル解像度ではたたむボタン消すのでマージンもなし
+  .name {
+    margin: .5em 0 .2em;
+  }
+}
+
+/* 名前カラー
+----------------------------- */
+$name-red: #f36;
+$name-blue: #6ff;
+$name-purpl: #c9f;
+$name-gray: #b0b0b0;
+$name-pink: #ef1c51;
+
+.red {	color: $name-red;  }
+.blue {	color: $name-blue;  }
+.purple {	color: $name-purpl;  }
+.gray {	color: $name-gray;  }
+.pink {	color: $name-pink;  }
+
+/* 名前のついてるセリフ
+----------------------------- */
+.text {
+  font-size: .9rem;
+  margin: 0 1em 0 2.3em;	// たたむボタンが被らないように余白確保
+}
+
+@media (max-width: $responsive-width) {  // モバイル解像度ではたたむボタン消すのでマージンもなし
+  .text {
+    margin: 0 0 0 .3em;
+  }
+}
+
+/* 名前のついてないセリフ以外の文字
+----------------------------- */
+.novoice {
+  $font-color: #ddd;
+
+  color: $font-color;
+  font-size: .8em;
+  margin: .5em 1em 0 3em;
+}
+
+@media (max-width: $responsive-width) {  // モバイル解像度ではたたむボタン消すのでマージンもなし
+  .novoice {
+    margin: .5em 0 0 1em;
+  }
+}

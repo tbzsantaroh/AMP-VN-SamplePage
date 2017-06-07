@@ -1,0 +1,187 @@
+@charset 'utf-8';
+
+
+/* ビジュアルノベルのwebページサンプルで使えそうなCSS */
+
+
+
+
+
+/* モバイル解像度時のテキストエリア縦幅を画像のアスペクト比にあわせて指定
+* 4:3   calc(100vh - 75vw)
+* 16:9   calc(100vh - 56.2vw)
+----------------------------- */
+$image-aspect-height: calc(100vh - 75vw);
+
+
+/* テキストウィンドがモバイル表示に切り替わる横幅
+* 画像の横幅から1px引いた値を入れる
+----------------------------- */
+$responsive-width: 1023px;
+
+
+/* メッセージウィンドの色設定
+----------------------------- */
+$massage-background-color: rgba(0, 0, 0, .6);  // 背景色
+$massage-font: 'Yu Gothic', 'Meiryo', sans-serif;  // メッセージウィンドのフォント
+$massage-text-color: #fff;  // セリフの色
+$massage-text-shadow-color: #000;  // セリフの縁取り色
+
+$noname-text-color: #ddd;  // 名前なしセリフの色 .text
+
+// 名前用の色
+$name-red: #f36;
+$name-blue: #6ff;
+$name-purpl: #c9f;
+$name-gray: #b0b0b0;
+$name-pink: #ef1c51;
+
+
+
+/* 画像の部分
+----------------------------- */
+.amp-img-wrap {
+  position: absolute;  // 上端部で2枚の画像を重ねて表示する
+  top: 0;  // 上端部で2枚の画像を重ねて表示する
+
+  width: 100%;  // position: absoluteでamp-imgのresponsive使うために横幅の指定は必須
+
+  &:hover {  // マウス乗せたら一枚目の画像を非表示 .flashのopacityアニメーションとは別
+    opacity: 0;
+  }
+}
+
+/* 発射エフェクト
+----------------------------- */
+.flash:hover {  animation: flash 1s linear;  }
+@keyframes flash {  // 画像が一瞬だけ全部透明になるのでbackground: #fffが見えて光ってるようにみえる
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+
+
+
+/* メッセージウィンドの部分
+----------------------------- */
+.space-massage {
+  background: $massage-background-color;
+  bottom: 0;
+  color: $massage-text-color;
+  font-family: $massage-font;	// フォント指定  游ゴシック、メイリオ優先
+  height: 30%;  // デスクトップ解像度でのテキストウィンドの縦幅
+  overflow: auto;
+  position: fixed;
+  text-shadow: 1px 0 2px $massage-text-shadow-color,
+  			-1px 0 2px $massage-text-shadow-color,
+  			0 1px 2px $massage-text-shadow-color,
+  			0 -1px 2px $massage-text-shadow-color;
+  width: 100%;
+}
+
+@media (max-width: $responsive-width) {
+  .space-massage {  // モバイル解像度用のエキストエリア位置指定
+    height: $image-aspect-height;
+  }
+}
+
+
+
+/* メッセージウィンド折りたたみ部分 label
+----------------------------- */
+.closebtn {
+  $btn-outline-color: #000;
+  $btn-dropshadow-color: #fff;
+  $btn-color: #fff;
+
+  bottom: 0;
+  color: $btn-color;
+  cursor: pointer;  // クリックできるように見せるためにカーソル変更
+  display: inline;
+  line-height: 0;
+  margin-left: .3em;
+  padding-bottom: 1.5em;  // 上の方にチェックボックスのマージンが絶対つくせいで表示位置がズレるので調整
+  position: fixed;
+  text-shadow: 1px 0 0 $btn-outline-color, -1px 0 0 $btn-outline-color, 0 1px 0 $btn-outline-color, 0 -1px 0 $btn-outline-color, 5px 5px 0 $btn-dropshadow-color;
+  z-index: 10;  // ボタンをウィンドより上に表示して押せるようにする
+
+  &:hover {
+    text-shadow: 1px 0 0 $btn-outline-color, -1px 0 0 $btn-outline-color, 0 1px 0 $btn-outline-color, 0 -1px 0 $btn-outline-color, 3px 3px 0 $btn-dropshadow-color;
+  }
+
+  &::selection {  // クリックするとテキスト範囲選択されることがあるんで選択カラー透明にする 現状firefoxでは-mozつけないと効かない
+    background: transparent;
+    color: transparent;
+  }
+}
+
+@media (max-width: $responsive-width) {
+  .closebtn {  /* モバイル解像度では畳む必要ないので消す */
+    display: none;
+  }
+}
+
+
+/* メッセージウィンド折りたたみ部分 input
+----------------------------- */
+.closebtn-input {
+  display: none;  // チェックボックスは表示する必要ないので消す
+
+  + .space-massage {
+    display: none;  // チェックボックスのチェックついてないときは非表示
+  }
+
+  &:checked + .space-massage {
+    display: block;  // チェックボックスのチェックついてるときは表示
+  }
+}
+
+
+
+
+/* テキスト設定
+----------------------------- */
+.name {  // 名前
+  font-weight: bold;
+  margin: .5em 0 .2em 2em;	// たたむボタンが被らないように余白確保
+}
+@media (max-width: $responsive-width) {  // モバイル解像度ではたたむボタン消すのでマージンもなし
+  .name {
+    margin: .5em 0 .2em;
+  }
+}
+
+/* 名前カラー
+----------------------------- */
+.red {	color: $name-red;  }
+.blue {	color: $name-blue;  }
+.purple {	color: $name-purpl;  }
+.gray {	color: $name-gray;  }
+.pink {	color: $name-pink;  }
+
+/* 名前のついてるセリフ
+----------------------------- */
+.text {
+  font-size: .9rem;
+  margin: 0 1em 0 2.3em;	// たたむボタンが被らないように余白確保
+}
+
+@media (max-width: $responsive-width) {  // モバイル解像度ではたたむボタン消すのでマージンもなし
+  .text {
+    margin: 0 0 0 .3em;
+  }
+}
+
+/* 名前のついてないセリフ以外の文字
+----------------------------- */
+.novoice {
+  color: $noname-text-color;
+  font-size: .8em;
+  margin: .5em 1em 0 3em;
+}
+
+@media (max-width: $responsive-width) {  // モバイル解像度ではたたむボタン消すのでマージンもなし
+  .novoice {
+    margin: .5em 0 0 1em;
+  }
+}
